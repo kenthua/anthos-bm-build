@@ -12,48 +12,55 @@ sudo raspi-config
 # force eth0 to static
 echo "interface eth0
 static ip_address=10.10.0.1/24
-#static routers=192.168.86.1
 static domain_name_servers=8.8.8.8" | sudo tee -a /etc/dhcpcd.conf
 
-# fix routing?
-# https://serverfault.com/questions/123553/how-to-set-the-preferred-network-interface-in-linux
+# enable port forwarding
+sysctl -w net.ipv4.ip_forward=1
+# persistent
+echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
 
-# https://linuxconfig.org/how-to-configure-a-raspberry-pi-as-a-pxe-boot-server
-# minus dnsmasq - using isc-dhcp-server
-sudo apt-get -y install dnsmasq pxelinux syslinux-efi
+# enable forwarding eth0 traffic through wlan0
+# https://serverfault.com/questions/152363/bridging-wlan0-to-eth0
+sudo iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
 
-sudo mkdir -p /mnt/data/netboot/{boot,bios,efi64}
+sudo apt-get install -y iptables-persistent
 
-sudo cp \
-  /usr/lib/syslinux/modules/bios/{ldlinux,vesamenu,libcom32,libutil}.c32 \
-  /usr/lib/PXELINUX/pxelinux.0 \
-  /mnt/data/netboot/bios
+sudo apt-get -y install dnsmasq
 
-sudo cp \
-  /usr/lib/syslinux/modules/efi64/ldlinux.e64 \
-  /usr/lib/syslinux/modules/efi64/{vesamenu,libcom32,libutil}.c32 \
-  /usr/lib/SYSLINUX.EFI/efi64/syslinux.efi \
-  /mnt/data/netboot/efi64
-
-TFTP_ROOT=/mnt/data/netboot
+TFTP_ROOT=/var/lib/tftpboot
+mkdir -p ${TFTP_ROOT}
 echo "port=0
 interface=eth0
 dhcp-range=10.10.0.10,10.10.0.200,12h
-enable-tftp
-tftp-root=/mnt/data/netboot
-pxe-service=x86PC,\"PXELINUX (BIOS)\",bios/pxelinux
-pxe-service=x86-64_EFI,\"PXELINUX (EFI)\",efi64/syslinux.efi
+dhcp-option=6,8.8.8.8,192.168.1.1
+dhcp-option=66,10.10.0.1
+dhcp-option=67,pxelinux.0
 log-queries
 log-facility=/var/log/dnsmasq.log" | sudo tee -a /etc/dnsmasq.conf
 
 #https://askubuntu.com/questions/1235723/automated-20-04-server-installation-using-pxe-and-live-server-image
+
+apt-get -y install tftpd-hpa apache2
+
+echo "# /etc/default/tftpd-hpa
+TFTP_USERNAME=\"tftp\"
+TFTP_DIRECTORY=\"/var/lib/tftpboot\"
+TFTP_ADDRESS=\"10.10.0.1:69\"
+TFTP_OPTIONS=\"--secure\"" | sudo tee /etc/default/tftpd-hpa
+
+echo "<Directory /var/lib/tftpboot>
+        Options +FollowSymLinks +Indexes
+        Require all granted
+</Directory>
+Alias /tftp /var/lib/tftpboot" | sudo tee /etc/apache2/conf-available/tftp.conf
+
 curl -OL https://releases.ubuntu.com/20.04/ubuntu-20.04.1-live-server-amd64.iso
 curl -OL http://archive.ubuntu.com/ubuntu/dists/focal/main/uefi/grub2-amd64/current/grubnetx64.efi.signed
 sudo cp grubnetx64.efi.signed ${TFTP_ROOT}/pxelinux.0
 
 TMP_PATH=/tmp/ubuntu
 mkdir -p ${TMP_PATH}
-sudo mount ubuntu-20.04.1-live-server-amd64.iso ${TMP_PATH}
+sudo mount ${TFTP_ROOT}/ubuntu-20.04.1-live-server-amd64.iso ${TMP_PATH}
 sudo cp ${TMP_PATH}/casper/vmlinuz ${TFTP_ROOT}
 sudo cp ${TMP_PATH}/casper/initrd ${TFTP_ROOT}
 sudo umount ${TMP_PATH}
@@ -65,13 +72,13 @@ timeout_style=menu
 menuentry \"Focal Live Installer - automate\" --id=autoinstall {
     echo \"Loading Kernel...\"
     # make sure to escape the ';'
-    linux /vmlinuz ip=dhcp url=http://${pxe_default_server}/tftp/ubuntu-20.04-live-server-amd64.iso autoinstall ds=nocloud-net\;s=http://${pxe_default_server}/tftp/
+    linux /vmlinuz ip=dhcp url=http://\${pxe_default_server}/tftp/ubuntu-20.04-live-server-amd64.iso autoinstall ds=nocloud-net\;s=http://${pxe_default_server}/tftp/
     echo \"Loading Ram Disk...\"
     initrd /initrd
 }
 menuentry \"Focal Live Installer\" --id=install {
     echo \"Loading Kernel...\"
-    linux /vmlinuz ip=dhcp url=http://${pxe_default_server}/tftp/ubuntu-20.04-live-server-amd64.iso
+    linux /vmlinuz ip=dhcp url=http://\${pxe_default_server}/tftp/ubuntu-20.04-live-server-amd64.iso
     echo \"Loading Ram Disk...\"
     initrd /initrd
 }" | sudo tee ${TFTP_ROOT}/grub/grub.cfg
@@ -153,6 +160,12 @@ write_files:
       linux-virtual
     owner: root:root
     permissions: \"0644\"" | sudo tee ${TFTP_ROOT}/user-data
+
+
+
+
+
+
 
 
 
