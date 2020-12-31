@@ -28,6 +28,9 @@ sudo apt-get install -y iptables-persistent
 sudo apt-get -y install dnsmasq
 
 TFTP_ROOT=/var/lib/tftpboot
+UBUNTU_ISO=ubuntu-20.04.1-live-server-amd64.iso
+TMP_PATH=/tmp/ubuntu
+
 mkdir -p ${TFTP_ROOT}
 echo "port=0
 interface=eth0
@@ -54,13 +57,14 @@ echo "<Directory /var/lib/tftpboot>
 </Directory>
 Alias /tftp /var/lib/tftpboot" | sudo tee /etc/apache2/conf-available/tftp.conf
 
-curl -OL https://releases.ubuntu.com/20.04/ubuntu-20.04.1-live-server-amd64.iso
+
+
+curl -OL https://releases.ubuntu.com/20.04/${UBUNTU_ISO}
 curl -OL http://archive.ubuntu.com/ubuntu/dists/focal/main/uefi/grub2-amd64/current/grubnetx64.efi.signed
 sudo cp grubnetx64.efi.signed ${TFTP_ROOT}/pxelinux.0
 
-TMP_PATH=/tmp/ubuntu
 mkdir -p ${TMP_PATH}
-sudo mount ${TFTP_ROOT}/ubuntu-20.04.1-live-server-amd64.iso ${TMP_PATH}
+sudo mount ${TFTP_ROOT}/${UBUNTU_ISO} ${TMP_PATH}
 sudo cp ${TMP_PATH}/casper/vmlinuz ${TFTP_ROOT}
 sudo cp ${TMP_PATH}/casper/initrd ${TFTP_ROOT}
 sudo umount ${TMP_PATH}
@@ -72,13 +76,13 @@ timeout_style=menu
 menuentry \"Focal Live Installer - automate\" --id=autoinstall {
     echo \"Loading Kernel...\"
     # make sure to escape the ';'
-    linux /vmlinuz ip=dhcp url=http://\${pxe_default_server}/tftp/ubuntu-20.04-live-server-amd64.iso autoinstall ds=nocloud-net\;s=http://${pxe_default_server}/tftp/
+    linux /vmlinuz ip=dhcp url=http://\${pxe_default_server}/tftp/${UBUNTU_ISO} autoinstall ds=nocloud-net\;s=http://${pxe_default_server}/tftp/
     echo \"Loading Ram Disk...\"
     initrd /initrd
 }
 menuentry \"Focal Live Installer\" --id=install {
     echo \"Loading Kernel...\"
-    linux /vmlinuz ip=dhcp url=http://\${pxe_default_server}/tftp/ubuntu-20.04-live-server-amd64.iso
+    linux /vmlinuz ip=dhcp url=http://\${pxe_default_server}/tftp/${UBUNTU_ISO}
     echo \"Loading Ram Disk...\"
     initrd /initrd
 }" | sudo tee ${TFTP_ROOT}/grub/grub.cfg
