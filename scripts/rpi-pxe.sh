@@ -5,6 +5,8 @@
 #setup /boot/ssh
 #setup /boot/wpa_supplicant.conf
 
+ssh-keygen -t rsa -b 4096 -C "user"
+
 sudo raspi-config
 #expand fs
 #change hostname
@@ -41,7 +43,7 @@ dhcp-option=67,pxelinux.0
 log-queries
 log-facility=/var/log/dnsmasq.log" | sudo tee -a /etc/dnsmasq.conf
 
-#https://askubuntu.com/questions/1235723/automated-20-04-server-installation-using-pxe-and-live-server-image
+#https://askubuntu.com/questions/1235723/automated-20-04-server-installation-using-pxe-and-live-server-image`
 
 apt-get -y install tftpd-hpa apache2
 
@@ -89,12 +91,11 @@ menuentry \"Focal Live Installer\" --id=install {
 
 echo "instance-id: focal-autoinstall" | sudo tee ${TFTP_ROOT}/meta-data
 
+# https://ubuntu.com/server/docs/install/autoinstall
+
 echo "#cloud-config
 autoinstall:
   version: 1
-  # use interactive-sections to avoid an automatic reboot
-  #interactive-sections:
-  #  - locale
   apt:
     # even set to no/false, geoip lookup still happens
     #geoip: no
@@ -105,10 +106,14 @@ autoinstall:
     - arches: [default]
       uri: http://ports.ubuntu.com/ubuntu-ports
   # r00tme
-  identity: {hostname: focal-autoinstall, password: HASHEDPASSWORD,
-    username: ubuntu}
-  keyboard: {layout: us, variant: ''}
-  locale: en_US.UTF-8
+  identity:
+    hostname: node
+    password: \$6\$ZoP3olp8Tg3ygmEm\$VFq3UDGbz6Sl.UCpEzZPicnYDaHn3lEqsjpwJwwKFNBlAcZpD5yns1uCI5fkfKjHDPkwGNEAEdbFjNoY2NjP/0
+    username: ubuntu
+  keyboard:
+    layout: en
+    variant: us
+  locale: en_US
   # interface name will probably be different
   network:
     network:
@@ -123,10 +128,11 @@ autoinstall:
     disable_root: false
     chpasswd:
       list: |
-        root:HASHEDPASSWORD
+        root:\$6\$ZoP3olp8Tg3ygmEm\$VFq3UDGbz6Sl.UCpEzZPicnYDaHn3lEqsjpwJwwKFNBlAcZpD5yns1uCI5fkfKjHDPkwGNEAEdbFjNoY2NjP/0
   ssh:
     allow-pw: true
-    authorized-keys: []
+    authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCquwVARyLFDuKZcuvpXZbJB/vlPz4yJpAjwsyltri40MoqAGwhSqz8kHycHBA7/wPDglIj6W6YGnvT3tXkyqhZD23zix6Q9RryCw3mVCjQzyMU0TbU3JkrJpgaekw+nmlRXY4DJ/4CdPnS3KdEvCYHEStFEaYutv0vNajqVNYlDFqo4/w60YRedd8eTf8AIbMurUcfgEmVk+lx0vVQhgMOzLHEUMhOeZEnPfheOX+/JGsuiAFiAwH6XVQuPmddNCjyxj7uC05SZQRt+KaeW6pVKjE2FAyNBpnVJpb1azWtPzs+BMLJbrctQd4NRkMCkPFDSW7O35nwDBsqgdt09XxM4kZlYCIUfZIf6Cm5Tyjrrv/ifgXnZikFIqieyFW34KaIvSmD9MGE4qhC1wR2sdTzaGYwrVy3UXc6u4ikrRj9TuZJWYHXJqw67EAgXw18YKszWRHEzlwALc32/jEplO0Ydfx+inauw8QNEXm+5Yce2nAGe93+Mbo6JWMZT4wviBR8LGlnhSLcUZIDRQo8oA+RVvZmvfn+XznITU6wA0armyswuWm1Vko5rkwISqIHQhLEkt6JCO8aX2YnsWlCb6bw+1E+OHH0rxhp2FIXeBk+12EfXNh7N/SYM5OVsyjvTbB/Otzl2qWFkL7ka15/ynXX75nlKnSIVrsiAjSAUy8GpQ== user
     install-server: true
   # this creates an efi partition, /boot partition, and root(/) lvm volume
   storage:
@@ -135,35 +141,28 @@ autoinstall:
     swap:
       size: 0
     config:
-    - {ptable: gpt, path: /dev/sda, preserve: false, name: '', grub_device: false,
-      type: disk, id: disk-sda}
-    - {device: disk-sda, size: 536870912, wipe: superblock, flag: boot, number: 1,
-      preserve: false, grub_device: true, type: partition, id: partition-sda1}
-    - {fstype: fat32, volume: partition-sda1, preserve: false, type: format, id: format-2}
-    - {device: disk-sda, size: 1073741824, wipe: superblock, flag: linux, number: 2,
-      preserve: false, grub_device: false, type: partition, id: partition-sda2}
-    - {fstype: ext4, volume: partition-sda2, preserve: false, type: format, id: format-0}
-    - {device: disk-sda, size: -1, flag: linux, number: 3, preserve: false,
-      grub_device: false, type: partition, id: partition-sda3}
-    - name: vg-0
-      devices: [partition-sda3]
+    - {ptable: gpt,
+      path: /dev/nvme0n1, wipe: superblock, preserve: false, name: '', grub_device: false,
+      type: disk, id: disk-nvme0n1}
+    - {device: disk-nvme0n1, size: 536870912, wipe: superblock, flag: boot, number: 1,
+      preserve: false, grub_device: true, type: partition, id: partition-0}
+    - {fstype: fat32, volume: partition-0, preserve: false, type: format, id: format-0}
+    - {device: disk-nvme0n1, size: 1073741824, wipe: superblock, flag: '', number: 2,
+      preserve: false, type: partition, id: partition-1}
+    - {fstype: ext4, volume: partition-1, preserve: false, type: format, id: format-1}
+    - {device: disk-nvme0n1, size: 248446451712, wipe: superblock, flag: '', number: 3,
+      preserve: false, type: partition, id: partition-2}
+    - name: ubuntu-vg
+      devices: [partition-2]
       preserve: false
       type: lvm_volgroup
-      id: lvm-volgroup-vg-0
-    - {name: lv-root, volgroup: lvm-volgroup-vg-0, size: 100%, preserve: false,
-      type: lvm_partition, id: lvm-partition-lv-root}
-    - {fstype: ext4, volume: lvm-partition-lv-root, preserve: false, type: format,
-      id: format-1}
-    - {device: format-1, path: /, type: mount, id: mount-2}
-    - {device: format-0, path: /boot, type: mount, id: mount-1}
-    - {device: format-2, path: /boot/efi, type: mount, id: mount-3}
-write_files:
-  # override the kernel package
-  - path: /run/kernel-meta-package
-    content: |
-      linux-virtual
-    owner: root:root
-    permissions: \"0644\"" | sudo tee ${TFTP_ROOT}/user-data
+      id: lvm_volgroup-0
+    - {name: ubuntu-lv, volgroup: lvm_volgroup-0, size: 124222701568B, preserve: false,
+      type: lvm_partition, id: lvm_partition-0}
+    - {fstype: ext4, volume: lvm_partition-0, preserve: false, type: format, id: format-2}
+    - {device: format-2, path: /, type: mount, id: mount-2}
+    - {device: format-1, path: /boot, type: mount, id: mount-1}
+    - {device: format-0, path: /boot/efi, type: mount, id: mount-0}" | sudo tee ${TFTP_ROOT}/user-data
 
 
 
