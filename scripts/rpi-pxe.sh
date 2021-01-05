@@ -106,16 +106,14 @@ autoinstall:
       uri: http://us.archive.ubuntu.com/ubuntu
     - arches: [default]
       uri: http://ports.ubuntu.com/ubuntu-ports
-  # r00tme
   identity:
     hostname: node
-    password: \"\$6\$ZoP3olp8Tg3ygmEm\$VFq3UDGbz6Sl.UCpEzZPicnYDaHn3lEqsjpwJwwKFNBlAcZpD5yns1uCI5fkfKjHDPkwGNEAEdbFjNoY2NjP/0\"
+    password: \$6\$ZoP3olp8Tg3ygmEm\$VFq3UDGbz6Sl.UCpEzZPicnYDaHn3lEqsjpwJwwKFNBlAcZpD5yns1uCI5fkfKjHDPkwGNEAEdbFjNoY2NjP/0
     username: ubuntu
   keyboard:
     layout: us
-    variant: \"\"
+    variant: ''
   locale: en_US
-  # interface name will probably be different
   network:
     network:
       version: 2
@@ -129,7 +127,7 @@ autoinstall:
     disable_root: false
     chpasswd:
       list: |
-        root:\"\$6\$ZoP3olp8Tg3ygmEm\$VFq3UDGbz6Sl.UCpEzZPicnYDaHn3lEqsjpwJwwKFNBlAcZpD5yns1uCI5fkfKjHDPkwGNEAEdbFjNoY2NjP/0\"
+        root:\$6\$ZoP3olp8Tg3ygmEm\$VFq3UDGbz6Sl.UCpEzZPicnYDaHn3lEqsjpwJwwKFNBlAcZpD5yns1uCI5fkfKjHDPkwGNEAEdbFjNoY2NjP/0
   ssh:
     allow-pw: true
     authorized-keys:
