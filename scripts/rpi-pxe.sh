@@ -89,7 +89,8 @@ menuentry \"Focal Live Installer\" --id=install {
     initrd /initrd
 }" | sudo tee ${TFTP_ROOT}/grub/grub.cfg
 
-echo "instance-id: focal-autoinstall" | sudo tee ${TFTP_ROOT}/meta-data
+touch ${TFTP_ROOT}/meta-data
+#echo "instance-id: focal-autoinstall" | sudo tee ${TFTP_ROOT}/meta-data
 
 # https://ubuntu.com/server/docs/install/autoinstall
 
