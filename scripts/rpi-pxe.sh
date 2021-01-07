@@ -34,7 +34,9 @@ UBUNTU_ISO=ubuntu-20.04.1-live-server-amd64.iso
 TMP_PATH=/tmp/ubuntu
 
 mkdir -p ${TFTP_ROOT}
-echo "port=0
+echo "
+# custom settings
+port=0
 interface=eth0
 dhcp-range=10.10.0.10,10.10.0.200,12h
 dhcp-option=6,8.8.8.8,192.168.1.1
@@ -42,8 +44,11 @@ dhcp-option=66,10.10.0.1
 dhcp-option=67,pxelinux.0
 log-queries
 log-facility=/var/log/dnsmasq.log
-dhcp-host=aa:bb:cc:dd:ee:ff,10.10.0.11
-dhcp-host=aa:bb:cc:ff:dd:ee,10.10.0.12
+dhcp-host=1c:69:7a:6f:b8:af,10.10.0.11
+dhcp-host=1c:69:7a:6f:9f:27,10.10.0.12
+dhcp-host=1c:69:7a:6f:ba:c1,10.10.0.13
+dhcp-host=1c:69:7a:6f:c0:a9,10.10.0.14
+dhcp-host=1c:69:7a:6f:ba:2c,10.10.0.15
 " | sudo tee -a /etc/dnsmasq.conf
 
 #https://askubuntu.com/questions/1235723/automated-20-04-server-installation-using-pxe-and-live-server-image
