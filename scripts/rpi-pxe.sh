@@ -67,11 +67,8 @@ echo "<Directory /var/lib/tftpboot>
 </Directory>
 Alias /tftp /var/lib/tftpboot" | sudo tee /etc/apache2/conf-available/tftp.conf
 
-
-
-curl -OL https://releases.ubuntu.com/20.04/${UBUNTU_ISO}
-curl -OL http://archive.ubuntu.com/ubuntu/dists/focal/main/uefi/grub2-amd64/current/grubnetx64.efi.signed
-sudo cp grubnetx64.efi.signed ${TFTP_ROOT}/pxelinux.0
+sudo curl -L https://releases.ubuntu.com/20.04/${UBUNTU_ISO} -o ${TFTP_ROOT}/${UBUNTU_ISO}
+sudo curl -L http://archive.ubuntu.com/ubuntu/dists/focal/main/uefi/grub2-amd64/current/grubnetx64.efi.signed -o ${TFTP_ROOT}/pxelinux.0
 
 mkdir -p ${TMP_PATH}
 sudo mount ${TFTP_ROOT}/${UBUNTU_ISO} ${TMP_PATH}
