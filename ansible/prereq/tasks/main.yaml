@@ -1,0 +1,15 @@
+---
+# tasks file for setup
+- name: stop/disable apparmor
+  service:
+    name: apparmor
+    state: stopped
+    enabled: false
+  failed_when: false
+
+- name: stop/disable ufw
+  service:
+    name: ufw
+    state: stopped
+    enabled: false
+  failed_when: false

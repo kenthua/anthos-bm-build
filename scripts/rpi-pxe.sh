@@ -109,6 +109,9 @@ autoinstall:
       type: print
   # change to your pub key
   ssh: {allow-pw: true, authorized-keys: ['ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCquwVARyLFDuKZcuvpXZbJB/vlPz4yJpAjwsyltri40MoqAGwhSqz8kHycHBA7/wPDglIj6W6YGnvT3tXkyqhZD23zix6Q9RryCw3mVCjQzyMU0TbU3JkrJpgaekw+nmlRXY4DJ/4CdPnS3KdEvCYHEStFEaYutv0vNajqVNYlDFqo4/w60YRedd8eTf8AIbMurUcfgEmVk+lx0vVQhgMOzLHEUMhOeZEnPfheOX+/JGsuiAFiAwH6XVQuPmddNCjyxj7uC05SZQRt+KaeW6pVKjE2FAyNBpnVJpb1azWtPzs+BMLJbrctQd4NRkMCkPFDSW7O35nwDBsqgdt09XxM4kZlYCIUfZIf6Cm5Tyjrrv/ifgXnZikFIqieyFW34KaIvSmD9MGE4qhC1wR2sdTzaGYwrVy3UXc6u4ikrRj9TuZJWYHXJqw67EAgXw18YKszWRHEzlwALc32/jEplO0Ydfx+inauw8QNEXm+5Yce2nAGe93+Mbo6JWMZT4wviBR8LGlnhSLcUZIDRQo8oA+RVvZmvfn+XznITU6wA0armyswuWm1Vko5rkwISqIHQhLEkt6JCO8aX2YnsWlCb6bw+1E+OHH0rxhp2FIXeBk+12EfXNh7N/SYM5OVsyjvTbB/Otzl2qWFkL7ka15/ynXX75nlKnSIVrsiAjSAUy8GpQ== user'], install-server: true}
+  late-commands:
+  - echo \"ubuntu ALL=(ALL:ALL) NOPASSWD:ALL\" > /target/etc/sudoers.d/ubuntu 
+  - chmod 440 /target/etc/sudoers.d/ubuntu 
   version: 1" | sudo tee ${TFTP_ROOT}/user-data
 
 
@@ -139,3 +142,18 @@ echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" | sudo te
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
 sudo apt update
 sudo apt install ansible
+
+
+
+# wipe disk fdisk -- not yet tested
+echo "n
+d
+3
+d
+2
+d
+
+w" | fdisk /dev/nvme0n1
+
+# wipe disk dd -- ctrl-c after a few sec
+sudo dd if=/dev/zero of=/dev/nvme0n1 bs=1M

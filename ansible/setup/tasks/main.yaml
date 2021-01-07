@@ -1,14 +1,5 @@
 ---
 # tasks file for setup
-- name: stop service
-  service:
-    name: apparmor
-    state: stopped
-  failed_when: false
-
-- name: remove service
-  service:
-    name: apparmor
-    enabled: false
-  failed_when: false
-
+- name: change hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
