@@ -99,27 +99,26 @@ sudo touch ${TFTP_ROOT}/meta-data
 
 echo "#cloud-config
 autoinstall:
+  # encrypted pw == passw0rd
   identity: {hostname: node, password: \$6\$VzsMBQNG.jLDEFAp\$IseeLgTaGWnZaktBfN0RvoG7GSf7ra3rEo4FO4nXq.h25GoxLLHWZjfv/e8MBbojAzcKaagy2qAcApVKoFh3F/,
     realname: ubuntu, username: ubuntu}
   keyboard: {layout: us, toggle: null, variant: ''}
   locale: en_US
   reporting:
     builtin:
-      type: print  
+      type: print
+  # change to your pub key
   ssh: {allow-pw: true, authorized-keys: ['ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCquwVARyLFDuKZcuvpXZbJB/vlPz4yJpAjwsyltri40MoqAGwhSqz8kHycHBA7/wPDglIj6W6YGnvT3tXkyqhZD23zix6Q9RryCw3mVCjQzyMU0TbU3JkrJpgaekw+nmlRXY4DJ/4CdPnS3KdEvCYHEStFEaYutv0vNajqVNYlDFqo4/w60YRedd8eTf8AIbMurUcfgEmVk+lx0vVQhgMOzLHEUMhOeZEnPfheOX+/JGsuiAFiAwH6XVQuPmddNCjyxj7uC05SZQRt+KaeW6pVKjE2FAyNBpnVJpb1azWtPzs+BMLJbrctQd4NRkMCkPFDSW7O35nwDBsqgdt09XxM4kZlYCIUfZIf6Cm5Tyjrrv/ifgXnZikFIqieyFW34KaIvSmD9MGE4qhC1wR2sdTzaGYwrVy3UXc6u4ikrRj9TuZJWYHXJqw67EAgXw18YKszWRHEzlwALc32/jEplO0Ydfx+inauw8QNEXm+5Yce2nAGe93+Mbo6JWMZT4wviBR8LGlnhSLcUZIDRQo8oA+RVvZmvfn+XznITU6wA0armyswuWm1Vko5rkwISqIHQhLEkt6JCO8aX2YnsWlCb6bw+1E+OHH0rxhp2FIXeBk+12EfXNh7N/SYM5OVsyjvTbB/Otzl2qWFkL7ka15/ynXX75nlKnSIVrsiAjSAUy8GpQ== user'], install-server: true}
   version: 1" | sudo tee ${TFTP_ROOT}/user-data
 
 
 
 
-###
-# isc-dhcp-server
-###
+#####################
+## isc-dhcp-server if not using dnsmasq
+#####################
 sudo apt-get update
 sudo apt-get -y install isc-dhcp-server
-
-# make the rpi the authoritative dhcp server
-#sudo sed -i "/^#authoritative;/a\authoritative;" /etc/dhcp/dhcpd.conf
 
 echo "authoritative
 subnet 10.10.0.0 netmask 255.255.255.0 {
@@ -134,3 +133,9 @@ option bootfile-name \"pxelinux.0\";
 
 # only do dhcp for ipv4 on eth0, leaving wlan0 alone
 sudo sed -i 's/INTERFACESv4=""/INTERFACESv4="eth0"/1 /etc/default/isc-dhcp-server
+
+# https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-debian
+echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" | sudo tee -a /etc/apt/sources.list
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+sudo apt update
+sudo apt install ansible
