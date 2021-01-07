@@ -1,5 +1,5 @@
 ---
-- name: node
+- name: setup node
   hosts: all
   gather_facts: true
   remote_user: ubuntu

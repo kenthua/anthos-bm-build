@@ -3,3 +3,10 @@
 - name: change hostname
   hostname:
     name: "{{ inventory_hostname }}"
+
+# fix for https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/1774632
+- name: set symlink for resolv.conf
+  file:
+    src: "/run/systemd/resolve/resolv.conf"
+    path: "/etc/resolv.conf"
+    state: link

@@ -36,19 +36,22 @@ TMP_PATH=/tmp/ubuntu
 mkdir -p ${TFTP_ROOT}
 echo "
 # custom settings
-port=0
 interface=eth0
 dhcp-range=10.10.0.10,10.10.0.200,12h
-dhcp-option=6,8.8.8.8,192.168.1.1
+dhcp-option=6,10.10.0.1,8.8.8.8,192.168.1.1
 dhcp-option=66,10.10.0.1
 dhcp-option=67,pxelinux.0
 log-queries
 log-facility=/var/log/dnsmasq.log
-dhcp-host=1c:69:7a:6f:b8:af,10.10.0.11
-dhcp-host=1c:69:7a:6f:9f:27,10.10.0.12
-dhcp-host=1c:69:7a:6f:ba:c1,10.10.0.13
-dhcp-host=1c:69:7a:6f:c0:a9,10.10.0.14
-dhcp-host=1c:69:7a:6f:ba:2c,10.10.0.15
+expand-hosts
+domain=anthos.cloud
+local=/anthos.cloud/
+#addn-hosts=/etc/dnsmasq_static_hosts.conf
+dhcp-host=1c:69:7a:6f:b8:af,10.10.0.11,node01
+dhcp-host=1c:69:7a:6f:9f:27,10.10.0.12,node02
+dhcp-host=1c:69:7a:6f:ba:c1,10.10.0.13,node03
+dhcp-host=1c:69:7a:6f:c0:a9,10.10.0.14,node04
+dhcp-host=1c:69:7a:6f:ba:2c,10.10.0.15,node05
 " | sudo tee -a /etc/dnsmasq.conf
 
 #https://askubuntu.com/questions/1235723/automated-20-04-server-installation-using-pxe-and-live-server-image
@@ -116,7 +119,10 @@ autoinstall:
   - chmod 440 /target/etc/sudoers.d/ubuntu 
   version: 1" | sudo tee ${TFTP_ROOT}/user-data
 
-
+sudo systemctl enable tftpd-hpa
+sudo systemctl start tftpd-hpa
+sudo systemctl enable apache2
+sudo systemctl start apache2
 
 
 #####################
