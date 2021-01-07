@@ -1,0 +1,10 @@
+---
+- name: setup
+  hosts: all
+  gather_facts: true
+  remote_user: ubuntu
+  become: true
+  roles:
+  - setup
+   
+
