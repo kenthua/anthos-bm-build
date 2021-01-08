@@ -52,10 +52,9 @@ sudo cp ${TMP_PATH}/casper/initrd ${TFTP_ROOT}
 sudo umount ${TMP_PATH}
 
 sudo mkdir -p ${TFTP_ROOT}/grub
-sudo cp grub.cfg ${TFTP_ROOT}/grub/grub.cfg
+cat grub.cfg | sed "s/UBUNTU_ISO/${UBUNTU_ISO}/" | sudo tee ${TFTP_ROOT}/grub/grub.cfg
 
 sudo touch ${TFTP_ROOT}/meta-data
-#echo "instance-id: focal-autoinstall" | sudo tee ${TFTP_ROOT}/meta-data
 
 # https://ubuntu.com/server/docs/install/autoinstall
 
