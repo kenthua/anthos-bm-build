@@ -1,6 +1,6 @@
 #
 resource "google_service_account" "connect_agent_svc_account" {
-  account_id   = var.connect_sa
+  account_id   = var.connect_agent_sa
   display_name = "Connect"
   project      = var.project_id
 }
