@@ -17,7 +17,7 @@ static ip_address=10.10.0.1/24
 static domain_name_servers=8.8.8.8" | sudo tee -a /etc/dhcpcd.conf
 
 # enable port forwarding
-sysctl -w net.ipv4.ip_forward=1
+sudo sysctl -w net.ipv4.ip_forward=1
 # persistent
 echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
 
@@ -56,7 +56,7 @@ dhcp-host=1c:69:7a:6f:ba:2c,10.10.0.15,node05
 
 #https://askubuntu.com/questions/1235723/automated-20-04-server-installation-using-pxe-and-live-server-image
 
-apt-get -y install tftpd-hpa apache2
+sudo apt-get -y install tftpd-hpa apache2
 
 echo "# /etc/default/tftpd-hpa
 TFTP_USERNAME=\"tftp\"
@@ -69,6 +69,8 @@ echo "<Directory /var/lib/tftpboot>
         Require all granted
 </Directory>
 Alias /tftp /var/lib/tftpboot" | sudo tee /etc/apache2/conf-available/tftp.conf
+
+sudo a2enconf tftp
 
 sudo curl -L https://releases.ubuntu.com/20.04/${UBUNTU_ISO} -o ${TFTP_ROOT}/${UBUNTU_ISO}
 sudo curl -L http://archive.ubuntu.com/ubuntu/dists/focal/main/uefi/grub2-amd64/current/grubnetx64.efi.signed -o ${TFTP_ROOT}/pxelinux.0

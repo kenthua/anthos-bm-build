@@ -17,14 +17,30 @@ TFTP_ROOT=/var/lib/tftpboot
 UBUNTU_ISO=ubuntu-20.04.1-live-server-amd64.iso
 TMP_PATH=/tmp/ubuntu
 
+## modify resolv.conf accordingly
+# nameserver 192.168.86.1
+# nameserver 10.10.0.1
+
+# options edns0
+# search anthos.cloud
+
+# disable ubuntu systemd-resolved
+sudo systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
+
 sudo mkdir -p ${TFTP_ROOT}
 sudo cp dnsmasq.conf /etc/dnsmasq.conf
+sudo systemctl restart dnsmasq
 
-#https://askubuntu.com/questions/1235723/automated-20-04-server-installation-using-pxe-and-live-server-image
-
-apt-get -y install apache2
+sudo apt-get -y install apache2
 
 sudo cp tftp.conf /etc/apache2/conf-available/tftp.conf
+
+sudo a2enconf tftp
+
+sudo systemctl enable apache2
+sudo systemctl reload apache2
+sudo systemctl restart apache2
 
 sudo curl -L https://releases.ubuntu.com/20.04/${UBUNTU_ISO} -o ${TFTP_ROOT}/${UBUNTU_ISO}
 sudo curl -L http://archive.ubuntu.com/ubuntu/dists/focal/main/uefi/grub2-amd64/current/grubnetx64.efi.signed -o ${TFTP_ROOT}/pxelinux.0
@@ -45,13 +61,6 @@ sudo touch ${TFTP_ROOT}/meta-data
 
 sudo cp user-data ${TFTP_ROOT}/user-data
 
-sudo systemctl enable apache2
-sudo systemctl start apache2
-
-
-# https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-debian
-echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main" | sudo tee -a /etc/apt/sources.list
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
 sudo apt update
 sudo apt install ansible
 
