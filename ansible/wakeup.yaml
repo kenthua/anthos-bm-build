@@ -2,9 +2,6 @@
 - hosts: all
   gather_facts: false
   tasks:
-  - debug:
-      var: hostvars
-
   - name: wakeup
     wakeonlan:
       mac: "{{ hostvars[inventory_hostname].mac }}"
