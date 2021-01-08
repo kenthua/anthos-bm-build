@@ -21,7 +21,7 @@ resource "google_service_account" "connect_register_svc_account" {
 resource "google_project_iam_member" "connect_register_svc_account_gkehubadmin" {
   project = var.project_id
   role    = "roles/gkehub.admin"
-  member  = "serviceAccount:${google_service_account.connect_register_svc_account_gkehubadmin.email}"
+  member  = "serviceAccount:${google_service_account.connect_register_svc_account.email}"
 }
 
 #
