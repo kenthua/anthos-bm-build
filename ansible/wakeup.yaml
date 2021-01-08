@@ -1,0 +1,12 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+  - debug:
+      var: hostvars
+
+  - name: wakeup
+    wakeonlan:
+      mac: "{{ hostvars[inventory_hostname].mac }}"
+      broadcast: 10.10.0.255
+    delegate_to: localhost

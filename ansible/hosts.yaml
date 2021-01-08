@@ -1,24 +1,30 @@
 controlplane:
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
   hosts:
     node01:
       ansible_host: 10.10.0.11
-      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+      mac: 1c:69:7a:6f:b8:af
     node02:
       ansible_host: 10.10.0.12
-      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+      mac: 1c:69:7a:6f:9f:27
     node03:
       ansible_host: 10.10.0.13
-      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+      mac: 1c:69:7a:6f:ba:c1
 nodes:
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
   hosts:
     node04:
       ansible_host: 10.10.0.14
-      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+      mac: 1c:69:7a:6f:c0:a9
     node05:
       ansible_host: 10.10.0.15
-      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+      mac: 1c:69:7a:6f:ba:2c
 test:
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
   hosts:
     node01:
       ansible_host: 10.10.0.11
-      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+      mac: 1c:69:7a:6f:b8:af
