@@ -1,9 +1,10 @@
-resource "google_project_service" "project" {
-  service = "servicemanagement.googleapis.com"
+variable "services" {
+  type = list(string)
+}
+
+resource "google_project_service" "services" {
+  for_each = toset(var.services)
+  service = each.value
   disable_dependent_services = true
 }
 
-resource "google_project_service" "project" {
-  service = "servicecontrol.googleapis.com"
-  disable_dependent_services = true
-}
