@@ -1,4 +1,11 @@
 #
+resource "google_service_account" "bm_gcr_svc_account" {
+  account_id   = var.bm_gcr_sa
+  display_name = "BM GCR"
+  project      = var.project_id
+}
+
+#
 resource "google_service_account" "connect_agent_svc_account" {
   account_id   = var.connect_agent_sa
   display_name = "Connect"
@@ -57,6 +64,26 @@ resource "google_project_iam_member" "logging_monitoring_svc_account_dashboarded
 
 
 # generate/download keys
+resource "google_service_account_key" "bm_gcr_svc_account_key" {
+  service_account_id = google_service_account.bm_gcr_svc_account.name
+  public_key_type    = "TYPE_X509_PEM_FILE"
+}
+
+resource "local_file" "bm_gcr_svc_account_key_file" {
+  content  = base64decode(google_service_account_key.bm_gcr_svc_account_key.private_key)
+  filename = "bm_gcr_svc_account_key.json"
+}
+
+resource "google_storage_bucket_object" "bm_gcr_svc_account_key_file_object" {
+  name       = "sa/bm_gcr_svc_account_key.json"
+  source     = "bm_gcr_svc_account_key.json"
+  bucket     = var.project_id
+  depends_on = [
+    local_file.bm_gcr_svc_account_key_file
+  ]
+}
+
+#
 resource "google_service_account_key" "connect_agent_svc_account_key" {
   service_account_id = google_service_account.connect_agent_svc_account.name
   public_key_type    = "TYPE_X509_PEM_FILE"

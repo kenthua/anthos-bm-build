@@ -6,6 +6,10 @@ variable "project_id" {
   type = string
 }
 
+variable "bm_gcr_sa" {
+    type = string
+}
+
 variable "connect_agent_sa" {
     type = string
 }
