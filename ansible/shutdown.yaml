@@ -6,6 +6,8 @@
     command: /sbin/shutdown -h now
     remote_user: ubuntu
     become: true
+    async: true
+    poll: 0
     ignore_unreachable: true
 
   - name: wait for hosts to be shutdown
