@@ -153,15 +153,14 @@ sudo apt install ansible
 
 
 
-# wipe disk fdisk -- not yet tested
-echo "n
-d
+# wipe disk fdisk - fast just wipe parition table
+echo "d
 3
 d
 2
 d
 
-w" | fdisk /dev/nvme0n1
+w" | sudo fdisk /dev/nvme0n1
 
 # wipe disk dd -- ctrl-c after a few sec
 sudo dd if=/dev/zero of=/dev/nvme0n1 bs=1M
