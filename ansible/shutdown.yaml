@@ -1,0 +1,16 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+  - name: shutdown nodes
+    command: /sbin/shutdown -h now
+    remote_user: ubuntu
+    become: true
+    ignore_unreachable: true
+
+  - name: wait for hosts to be shutdown
+    local_action:
+      module:  wait_for 
+      host: "{{ ansible_host }}"
+      port: 22
+      state: stopped 

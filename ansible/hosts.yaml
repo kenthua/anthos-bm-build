@@ -2,17 +2,23 @@ controlplane:
   hosts:
     node01:
       ansible_host: 10.10.0.11
+      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
     node02:
       ansible_host: 10.10.0.12
+      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
     node03:
       ansible_host: 10.10.0.13
+      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
 nodes:
   hosts:
     node04:
       ansible_host: 10.10.0.14
+      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
     node05:
       ansible_host: 10.10.0.15
+      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
 test:
   hosts:
     node01:
       ansible_host: 10.10.0.11
+      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
