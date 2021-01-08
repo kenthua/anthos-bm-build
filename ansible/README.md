@@ -9,6 +9,11 @@
     ansible-playbook -i hosts.yaml -l test init.yaml
     ```
 
+* wakeup the nodes
+    ```
+    ansible-playbook -i hosts.yaml wakeup.yaml
+    ```
+
 * shutdown the nodes
     ```
     ansible-playbook -i hosts.yaml shutdown.yaml
