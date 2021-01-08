@@ -61,9 +61,14 @@ cat grub.cfg | sed "s/UBUNTU_ISO/${UBUNTU_ISO}/" | sudo tee ${TFTP_ROOT}/grub/gr
 sudo touch ${TFTP_ROOT}/meta-data
 sudo cp user-data ${TFTP_ROOT}/user-data
 
-# get ansible ready
+# get ansible
 sudo apt update
 sudo apt install ansible
+
+# get terraform
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt-get update && sudo apt-get install terraform
 
 #####################
 ## cleaning the disk
