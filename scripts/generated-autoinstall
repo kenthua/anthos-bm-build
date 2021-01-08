@@ -1,0 +1,118 @@
+#cloud-config
+autoinstall:
+  apt:
+    geoip: true
+    preserve_sources_list: false
+    primary:
+    - arches: [amd64, i386]
+      uri: http://us.archive.ubuntu.com/ubuntu
+    - arches: [default]
+      uri: http://ports.ubuntu.com/ubuntu-ports
+  identity: {hostname: node, password: $6$VzsMBQNG.jLDEFAp$IseeLgTaGWnZaktBfN0RvoG7GSf7ra3rEo4FO4nXq.h25GoxLLHWZjfv/e8MBbojAzcKaagy2qAcApVKoFh3F/,
+    realname: ubuntu, username: ubuntu}
+  keyboard: {layout: us, toggle: null, variant: ''}
+  locale: en_US
+  network:
+    ethernets:
+      eno1:
+        critical: true
+        dhcp-identifier: mac
+        dhcp4: true
+        nameservers:
+          addresses: [8.8.8.8, 192.168.1.1]
+    version: 2
+  snaps:
+    docker: !!python/object:subiquity.models.snaplist.SnapSelection {channel: stable,
+      is_classic: false}
+  ssh:
+    allow-pw: true
+    authorized-keys: []
+    install-server: true
+  storage:
+    config:
+    - {ptable: gpt, serial: Samsung SSD 970 EVO Plus 250GB_S59BNS0N702050T, wwn: eui.00253857014084fb,
+      path: /dev/nvme0n1, wipe: superblock, preserve: false, name: '', grub_device: false,
+      type: disk, id: disk-nvme0n1}
+    - {device: disk-nvme0n1, size: 536870912, wipe: superblock, flag: boot, number: 1,
+      preserve: false, grub_device: true, type: partition, id: partition-0}
+    - {fstype: fat32, volume: partition-0, preserve: false, type: format, id: format-0}
+    - {device: disk-nvme0n1, size: 1073741824, wipe: superblock, flag: '', number: 2,
+      preserve: false, type: partition, id: partition-1}
+    - {fstype: ext4, volume: partition-1, preserve: false, type: format, id: format-1}
+    - {device: disk-nvme0n1, size: 248446451712, wipe: superblock, flag: '', number: 3,
+      preserve: false, type: partition, id: partition-2}
+    - name: ubuntu-vg
+      devices: [partition-2]
+      preserve: false
+      type: lvm_volgroup
+      id: lvm_volgroup-0
+    - {name: ubuntu-lv, volgroup: lvm_volgroup-0, size: 124222701568B, preserve: false,
+      type: lvm_partition, id: lvm_partition-0}
+    - {fstype: ext4, volume: lvm_partition-0, preserve: false, type: format, id: format-2}
+    - {device: format-2, path: /, type: mount, id: mount-2}
+    - {device: format-1, path: /boot, type: mount, id: mount-1}
+    - {device: format-0, path: /boot/efi, type: mount, id: mount-0}
+  version: 1
+
+
+
+
+echo "#cloud-config
+autoinstall:
+  apt:
+    geoip: true
+    preserve_sources_list: false
+    primary:
+    - arches: [amd64, i386]
+      uri: http://us.archive.ubuntu.com/ubuntu
+    - arches: [default]
+      uri: http://ports.ubuntu.com/ubuntu-ports
+  identity: {hostname: node, password: \$6\$VzsMBQNG.jLDEFAp\$IseeLgTaGWnZaktBfN0RvoG7GSf7ra3rEo4FO4nXq.h25GoxLLHWZjfv/e8MBbojAzcKaagy2qAcApVKoFh3F/,
+    realname: ubuntu, username: ubuntu}
+  keyboard: {layout: us, toggle: null, variant: ''}
+  locale: en_US
+#  network:
+#    network:
+#      ethernets:
+#        eno1:
+#          critical: true
+#          dhcp-identifier: mac
+#          dhcp4: true
+  snaps:
+    docker: !!python/object:subiquity.models.snaplist.SnapSelection {channel: stable,
+      is_classic: false}        
+  user-data:
+    timezone: America/Los_Angeles
+    disable_root: false
+  ssh:
+    allow-pw: true
+    authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCquwVARyLFDuKZcuvpXZbJB/vlPz4yJpAjwsyltri40MoqAGwhSqz8kHycHBA7/wPDglIj6W6YGnvT3tXkyqhZD23zix6Q9RryCw3mVCjQzyMU0TbU3JkrJpgaekw+nmlRXY4DJ/4CdPnS3KdEvCYHEStFEaYutv0vNajqVNYlDFqo4/w60YRedd8eTf8AIbMurUcfgEmVk+lx0vVQhgMOzLHEUMhOeZEnPfheOX+/JGsuiAFiAwH6XVQuPmddNCjyxj7uC05SZQRt+KaeW6pVKjE2FAyNBpnVJpb1azWtPzs+BMLJbrctQd4NRkMCkPFDSW7O35nwDBsqgdt09XxM4kZlYCIUfZIf6Cm5Tyjrrv/ifgXnZikFIqieyFW34KaIvSmD9MGE4qhC1wR2sdTzaGYwrVy3UXc6u4ikrRj9TuZJWYHXJqw67EAgXw18YKszWRHEzlwALc32/jEplO0Ydfx+inauw8QNEXm+5Yce2nAGe93+Mbo6JWMZT4wviBR8LGlnhSLcUZIDRQo8oA+RVvZmvfn+XznITU6wA0armyswuWm1Vko5rkwISqIHQhLEkt6JCO8aX2YnsWlCb6bw+1E+OHH0rxhp2FIXeBk+12EfXNh7N/SYM5OVsyjvTbB/Otzl2qWFkL7ka15/ynXX75nlKnSIVrsiAjSAUy8GpQ== user
+    install-server: true
+  storage:
+    config:
+    - {ptable: gpt,
+      path: /dev/nvme0n1, wipe: superblock, preserve: false, name: '', grub_device: false,
+      type: disk, id: disk-nvme0n1}
+    - {device: disk-nvme0n1, size: 536870912, wipe: superblock, flag: boot, number: 1,
+      preserve: false, grub_device: true, type: partition, id: partition-0}
+    - {fstype: fat32, volume: partition-0, preserve: false, type: format, id: format-0}
+    - {device: disk-nvme0n1, size: 1073741824, wipe: superblock, flag: '', number: 2,
+      preserve: false, type: partition, id: partition-1}
+    - {fstype: ext4, volume: partition-1, preserve: false, type: format, id: format-1}
+    - {device: disk-nvme0n1, size: 248446451712, wipe: superblock, flag: '', number: 3,
+      preserve: false, type: partition, id: partition-2}
+    - name: ubuntu-vg
+      devices: [partition-2]
+      preserve: false
+      type: lvm_volgroup
+      id: lvm_volgroup-0
+    - {name: ubuntu-lv, volgroup: lvm_volgroup-0, size: 124222701568B, preserve: false,
+      type: lvm_partition, id: lvm_partition-0}
+    - {fstype: ext4, volume: lvm_partition-0, preserve: false, type: format, id: format-2}
+    - {device: format-2, path: /, type: mount, id: mount-2}
+    - {device: format-1, path: /boot, type: mount, id: mount-1}
+    - {device: format-0, path: /boot/efi, type: mount, id: mount-0}
+  version: 1" | sudo tee ${TFTP_ROOT}/user-data
+
+

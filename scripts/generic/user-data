@@ -1,0 +1,16 @@
+#cloud-config
+autoinstall:
+  # encrypted pw == passw0rd
+  identity: {hostname: node, password: $6$VzsMBQNG.jLDEFAp$IseeLgTaGWnZaktBfN0RvoG7GSf7ra3rEo4FO4nXq.h25GoxLLHWZjfv/e8MBbojAzcKaagy2qAcApVKoFh3F/,
+    realname: ubuntu, username: ubuntu}
+  keyboard: {layout: us, toggle: null, variant: ''}
+  locale: en_US
+  reporting:
+    builtin:
+      type: print
+  # change to your pub key
+  ssh: {allow-pw: true, authorized-keys: ['ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCquwVARyLFDuKZcuvpXZbJB/vlPz4yJpAjwsyltri40MoqAGwhSqz8kHycHBA7/wPDglIj6W6YGnvT3tXkyqhZD23zix6Q9RryCw3mVCjQzyMU0TbU3JkrJpgaekw+nmlRXY4DJ/4CdPnS3KdEvCYHEStFEaYutv0vNajqVNYlDFqo4/w60YRedd8eTf8AIbMurUcfgEmVk+lx0vVQhgMOzLHEUMhOeZEnPfheOX+/JGsuiAFiAwH6XVQuPmddNCjyxj7uC05SZQRt+KaeW6pVKjE2FAyNBpnVJpb1azWtPzs+BMLJbrctQd4NRkMCkPFDSW7O35nwDBsqgdt09XxM4kZlYCIUfZIf6Cm5Tyjrrv/ifgXnZikFIqieyFW34KaIvSmD9MGE4qhC1wR2sdTzaGYwrVy3UXc6u4ikrRj9TuZJWYHXJqw67EAgXw18YKszWRHEzlwALc32/jEplO0Ydfx+inauw8QNEXm+5Yce2nAGe93+Mbo6JWMZT4wviBR8LGlnhSLcUZIDRQo8oA+RVvZmvfn+XznITU6wA0armyswuWm1Vko5rkwISqIHQhLEkt6JCO8aX2YnsWlCb6bw+1E+OHH0rxhp2FIXeBk+12EfXNh7N/SYM5OVsyjvTbB/Otzl2qWFkL7ka15/ynXX75nlKnSIVrsiAjSAUy8GpQ== user'], install-server: true}
+  late-commands:
+  - echo "ubuntu ALL=(ALL:ALL) NOPASSWD:ALL" > /target/etc/sudoers.d/ubuntu 
+  - chmod 440 /target/etc/sudoers.d/ubuntu 
+  version: 1
