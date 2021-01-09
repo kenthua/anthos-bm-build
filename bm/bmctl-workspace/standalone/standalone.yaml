@@ -3,11 +3,11 @@
 # create the initial admin/hybrid cluster. Afterwards, when creating user clusters by directly
 # applying the cluster and node pool resources to the existing cluster, you must remove this
 # section.
-gcrKeyPath: /home/kenthua/bm/bm_gcr_svc_account_key.json
-sshPrivateKeyPath: /home/kenthua/.ssh/id_rsa_build
-gkeConnectAgentServiceAccountKeyPath: /home/kenthua/bm/connect_agent_svc_account_key.json
-gkeConnectRegisterServiceAccountKeyPath: /home/kenthua/bm/connect_register_svc_account_key.json
-cloudOperationsServiceAccountKeyPath: /home/kenthua/bm/logging_monitoring_svc_account_key.json
+gcrKeyPath: /home/homer/bm/bm_gcr_svc_account_key.json
+sshPrivateKeyPath: /home/homer/.ssh/id_rsa_build
+gkeConnectAgentServiceAccountKeyPath: /home/homer/bm/connect_agent_svc_account_key.json
+gkeConnectRegisterServiceAccountKeyPath: /home/homer/bm/connect_register_svc_account_key.json
+cloudOperationsServiceAccountKeyPath: /home/homer/bm/logging_monitoring_svc_account_key.json
 ---
 apiVersion: v1
 kind: Namespace
