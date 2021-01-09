@@ -169,8 +169,8 @@ spec:
   #     certificateAuthorityData: <Base64 PEM-encoded certificate authority certificate of your OIDC provider; optional>
   # Node access configuration; uncomment this section if you wish to use a non-root user
   # with passwordless sudo capability for machine login.
-  # nodeAccess:
-  #   loginUser: <login user name>
+  nodeAccess:
+    loginUser: ubuntu
 ---
 # Node pools for worker nodes
 apiVersion: baremetal.cluster.gke.io/v1
