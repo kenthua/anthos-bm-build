@@ -15,6 +15,6 @@
 * `bm` - generated & tweaked Anthos Bare Metal standalone configuration
 
 ### Reset the environment / Starting over
-* Wipe SSD on each nuc (ex: in `scripts` folder), forcing PXE on reboot
+* Wipe SSD on each nuc (ex: in `scripts` folder), forcing PXE on reboot (playbook? TBD)
 * Ubuntu headless autoinstall to load 20.04 onto each node.  
   * Setup `ubuntu` user, passwordless sudo and ssh public key. ` 
