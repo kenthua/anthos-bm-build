@@ -9,7 +9,7 @@
 * Intel NUCs boot via PXE (default) if the internal SSD is not bootable
 * `scripts/ubuntu` - script (ansible playbook TODO) to setup network services node
 * `ansible` playbooks 
-  * initialize prereqs for Anthos Baer Metal for Ubuntu 
+  * initialize prereqs for Anthos Bare Metal for Ubuntu 
   * shutdown and wakeup (wol) playbooks
 * `terraform` - to setup google api services and service accounts, remote state in gcp bucket
 * `bm` - generated & tweaked Anthos Bare Metal standalone configuration
