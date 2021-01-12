@@ -1,0 +1,5 @@
+---
+# tasks file for roles/check
+- name: check hostname is node, which means it's empty and ready
+  debug:
+  when: ansible_facts['hostname'] == 'node'

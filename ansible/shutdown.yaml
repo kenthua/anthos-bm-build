@@ -1,11 +1,11 @@
 ---
 - hosts: all
   gather_facts: false
+  remote_user: ubuntu
+  become: true
   tasks:
   - name: shutdown nodes
     command: /sbin/shutdown -h now
-    remote_user: ubuntu
-    become: true
     async: true
     poll: 0
     ignore_unreachable: true
