@@ -10,11 +10,12 @@
 * `scripts/ubuntu` - script (ansible playbook TODO) to setup network services node
 * `ansible` playbooks 
   * initialize prereqs for Anthos Bare Metal for Ubuntu 
-  * shutdown and wakeup (wol) playbooks
+  * shutdown and wakeup (wol) playbook
+  * wipe ssd and trigger a restart to pxe boot a new install
 * `terraform` - to setup google api services and service accounts, remote state in gcp bucket
 * `bm` - generated & tweaked Anthos Bare Metal standalone configuration
 
 ### Reset the environment / Starting over
-* Wipe SSD on each nuc (ex: in `scripts` folder), forcing PXE on reboot (playbook? TBD)
+* Wipe SSD on each nuc (ex: in `scripts` folder), forcing PXE on reboot
 * Ubuntu headless autoinstall to load 20.04 onto each node.  
-  * Setup `ubuntu` user, passwordless sudo and ssh public key. ` 
+  * Setup `ubuntu` user, passwordless sudo and ssh public key.  
