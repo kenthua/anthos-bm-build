@@ -6,7 +6,7 @@ echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
 
 # enable forwarding eth0 traffic through wlan0 and make it persistent
 # https://serverfault.com/questions/152363/bridging-wlan0-to-eth0
-sudo iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
+sudo iptables -t nat -A POSTROUTING -o wlp2s0 -j MASQUERADE
 sudo apt-get install -y iptables-persistent
 
 # setup dns / tftp
