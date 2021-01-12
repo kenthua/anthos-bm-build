@@ -1,5 +1,10 @@
 ---
 # tasks file for roles/check
-- name: check hostname is node, which means it's empty and ready
-  debug:
-  when: ansible_facts['hostname'] == 'node'
+- name: loop until hostname is 'node', which means ready
+  setup:
+    gather_subset: facter
+  register: result
+  until: result.stdout.ansible_facts.ansible_env.HOSTNAME == 'node'
+  retries: 5
+  delay: 300
+  tags: [ 'never', 'special' ]
