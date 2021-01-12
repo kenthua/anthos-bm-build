@@ -27,11 +27,4 @@
   become: true
   roles:
   - setup
-
-- name: bm prereq
-  hosts: all
-  gather_facts: true
-  remote_user: ubuntu
-  become: true
-  roles:
   - prereq
