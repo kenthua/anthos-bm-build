@@ -19,6 +19,11 @@
     ansible-playbook -i hosts.yaml shutdown.yaml
     ```
 
+* reset the install, wipes and checks and init
+    ```
+    anisble-playbook -i hosts.yaml reset.yaml
+    ```
+
 * wipe the nodes (there will be a confirmation, true/false), true being execute.  wipe, reboot, clear the local known_hosts of applicable host entries, wait ~1100 seconds, yours may differ, check the nodes
     ```
     ansible-playbook -i hosts.yaml wipe.yaml
