@@ -21,10 +21,3 @@ nodes:
     node05:
       ansible_host: 10.10.0.15
       mac: 1c:69:7a:6f:ba:2c
-test:
-  vars:
-    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
-  hosts:
-    node01:
-      ansible_host: 10.10.0.11
-      mac: 1c:69:7a:6f:b8:af

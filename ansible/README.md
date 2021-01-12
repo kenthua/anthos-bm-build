@@ -6,7 +6,7 @@
 
 * testing just node01
     ```
-    ansible-playbook -i hosts.yaml -l test init.yaml
+    ansible-playbook -i hosts.yaml -l node01 init.yaml
     ```
 
 * wakeup the nodes
