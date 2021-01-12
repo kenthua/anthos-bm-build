@@ -10,3 +10,4 @@
     src: "/run/systemd/resolve/resolv.conf"
     path: "/etc/resolv.conf"
     state: link
+  when: ansible_distribution == 'Ubuntu'

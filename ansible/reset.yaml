@@ -1,0 +1,37 @@
+---
+# parted module is not sufficient, as it deletes partition, but drive still bootable
+# reboot module expects the machine to comeback, but while it's installing the key may be different
+- name: wipe the hosts
+  hosts: all
+  gather_facts: false
+  become: true
+  remote_user: ubuntu
+  vars_prompt:
+  - name: confirmation
+    prompt: "Are you sure you want to wipe? (yes/no)"
+    private: no
+  roles:
+  - wipe
+
+- name: check the hosts are empty/ready
+  hosts: all
+  gather_facts: true
+  remote_user: ubuntu
+  roles:
+  - check
+
+- name: setup node
+  hosts: all
+  gather_facts: true
+  remote_user: ubuntu
+  become: true
+  roles:
+  - setup
+
+- name: bm prereq
+  hosts: all
+  gather_facts: true
+  remote_user: ubuntu
+  become: true
+  roles:
+  - prereq

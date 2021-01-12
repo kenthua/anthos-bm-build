@@ -5,6 +5,7 @@
     name: apparmor
     state: stopped
     enabled: false
+  when: ansible_distribution == 'Ubuntu'
   failed_when: false
 
 - name: stop/disable ufw
@@ -12,4 +13,5 @@
     name: ufw
     state: stopped
     enabled: false
+  when: ansible_distribution == 'Ubuntu'
   failed_when: false
