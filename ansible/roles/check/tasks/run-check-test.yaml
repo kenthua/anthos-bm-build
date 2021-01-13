@@ -1,0 +1,29 @@
+---
+- name: Check the node for the expected hostname 'node'
+  command: cat /etc/hostname
+  register: the_hostname
+  until: the_hostname.stdout == 'node'
+  retries: 2
+  delay: 1
+  ignore_unreachable: True
+  ignore_errors: True
+
+- name: Sleep if the host was unreachable
+  pause:
+    seconds: 30
+  when: the_hostname is unreachable
+  delegate_to: localhost
+ 
+- name: Decrement retry counter
+  set_fact:
+    safety_counter: "{{ (safety_counter | default(50) | int) - 1}}"
+
+- name: Counter value
+  debug:
+    var: safety_counter
+
+# loop if counter is still true
+- include_tasks: run-check-test.yaml
+  when:
+    - (safety_counter | int > 0)
+    - the_hostname is not succeeded or the_hostname is unreachable

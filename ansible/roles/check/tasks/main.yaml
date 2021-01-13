@@ -1,5 +1,11 @@
 ---
-# tasks file for roles/check
-- name: check hostname is node, which means it's empty and ready
-  debug:
-  when: ansible_facts['hostname'] == 'node'
+# we do the include because while ignore_unreachable doesn't stop the playbook
+# it does move on, so we need to ensure that it loops
+# https://www.ansible.com/blog/tolerable-ansible
+- include_tasks: run-check-test.yaml
+ 
+- name: Failure in validating the node has been successfully autoinstalled
+  fail:
+    msg: "Autoinstall has failed on {{ inventory_hostname }}"
+  when: the_hostname is not defined or the_hostname is not succeeded or the_hostname is unreachable
+

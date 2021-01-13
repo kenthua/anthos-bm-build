@@ -15,7 +15,7 @@
 
 - name: check the hosts are empty/ready
   hosts: all
-  gather_facts: true
+  gather_facts: false
   remote_user: ubuntu
   roles:
   - check

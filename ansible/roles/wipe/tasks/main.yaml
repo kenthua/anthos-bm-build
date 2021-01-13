@@ -33,9 +33,3 @@
     state: absent
   delegate_to: localhost
   when: confirmation | bool
-
-- name: wait for 1100 seconds
-  wait_for:
-    timeout: 1100
-  delegate_to: localhost
-  when: confirmation | bool
