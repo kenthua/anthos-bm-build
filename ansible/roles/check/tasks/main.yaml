@@ -9,3 +9,9 @@
     msg: "Autoinstall has failed on {{ inventory_hostname }}"
   when: the_hostname is not defined or the_hostname is not succeeded or the_hostname is unreachable
 
+- name: remove current hosts from known_hosts
+  become: false
+  known_hosts:
+    name: "{{ ansible_host }}"
+    state: absent
+  delegate_to: localhost
