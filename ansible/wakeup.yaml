@@ -5,5 +5,5 @@
   - name: wakeup
     wakeonlan:
       mac: "{{ hostvars[inventory_hostname].mac }}"
-      broadcast: 10.10.0.255
+      broadcast: "{{ ansible_host }}"
     delegate_to: localhost
