@@ -37,3 +37,9 @@ chmod 755 kubectl
 sudo mv kubectl /usr/local/bin
 
 
+sudo systemctl disable firewalld
+sudo systemctl stop firewalld
+
+sudo setenforce 0 # temporary
+sudo sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config # persistent - requires reboot
+
