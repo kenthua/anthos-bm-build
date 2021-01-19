@@ -7,7 +7,9 @@
 # fix for https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/1774632
 - name: set symlink for resolv.conf
   file:
-    src: "/run/systemd/resolve/resolv.conf"
+    src: "/run/systemd/resolve/stub-resolv.conf"
     path: "/etc/resolv.conf"
     state: link
   when: ansible_distribution == 'Ubuntu'
+  tags:
+  - systemd-resolve
