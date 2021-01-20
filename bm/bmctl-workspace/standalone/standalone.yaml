@@ -3,11 +3,11 @@
 # create the initial admin/hybrid cluster. Afterwards, when creating user clusters by directly
 # applying the cluster and node pool resources to the existing cluster, you must remove this
 # section.
-gcrKeyPath: /home/homer/bm/bm_gcr_svc_account_key.json
-sshPrivateKeyPath: /home/homer/.ssh/id_rsa_build
-gkeConnectAgentServiceAccountKeyPath: /home/homer/bm/connect_agent_svc_account_key.json
-gkeConnectRegisterServiceAccountKeyPath: /home/homer/bm/connect_register_svc_account_key.json
-cloudOperationsServiceAccountKeyPath: /home/homer/bm/logging_monitoring_svc_account_key.json
+gcrKeyPath: /centos/centosr/bm/bm_gcr_svc_account_key.json
+sshPrivateKeyPath: /centos/centosr/.ssh/id_rsa_build
+gkeConnectAgentServiceAccountKeyPath: /centos/centosr/bm/connect_agent_svc_account_key.json
+gkeConnectRegisterServiceAccountKeyPath: /centos/centosr/bm/connect_register_svc_account_key.json
+cloudOperationsServiceAccountKeyPath: /centos/centosr/bm/logging_monitoring_svc_account_key.json
 ---
 apiVersion: v1
 kind: Namespace
@@ -45,7 +45,7 @@ spec:
     # Pods specify the IP ranges from which Pod networks are allocated.
     pods:
       cidrBlocks:
-      - 192.168.0.0/16
+      - 192.168.192.0/18
     # Services specify the network ranges from which service VIPs are allocated.
     # This can be any RFC1918 range that does not conflict with any other IP range
     # in the cluster and node pool resources.
