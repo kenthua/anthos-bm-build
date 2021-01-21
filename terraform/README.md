@@ -16,3 +16,18 @@ gcloud auth applcation-default login
 
 gsutil mb gs://${PROJECT_ID}
 ```
+
+```
+FILENAME=replicate_sa.sh
+GCR=bm_gcr_svc_account_key.json
+CA=connect_agent_svc_account_key.json
+CR=connect_register_svc_account_key.json
+LM=logging_monitoring_svc_account_key.json
+echo "#!/bin/bash" > ${FILENAME}
+
+for I in ${GCR} ${CA} ${CR} ${LM}; do
+    echo "cat <<EOF > ${I}" >> ${FILENAME}
+    cat ${I} >> ${FILENAME}
+    echo "EOF" >> ${FILENAME}
+done
+```
