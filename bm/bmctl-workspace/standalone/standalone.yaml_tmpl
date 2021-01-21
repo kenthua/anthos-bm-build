@@ -30,7 +30,7 @@ spec:
   anthosBareMetalVersion: 1.6.0
   # GKE connect configuration
   gkeConnect:
-    projectID: kenthua-dev
+    projectID: PROJECT_ID
   # Control plane configuration
   controlPlane:
     nodePoolSpec:
@@ -99,7 +99,7 @@ spec:
   # Logging and Monitoring
   clusterOperations:
     # Cloud project for logs and metrics.
-    projectID: kenthua-dev
+    projectID: PROJECT_ID
     # Cloud location for logs and metrics.
     location: us-central1
     # Whether collection of application logs/metrics should be enabled (in addition to
