@@ -1,6 +1,6 @@
 terraform {
  backend "gcs" {
-   bucket  = "kenthua-dev"
+   bucket  = "PROJECT_ID"
    prefix  = "tfstate"
  }
 }

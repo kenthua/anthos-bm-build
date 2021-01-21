@@ -12,7 +12,7 @@ services=[
   "monitoring.googleapis.com",
   "logging.googleapis.com"
 ]
-project_id="kenthua-dev"
+project_id="PROJECT_ID"
 bm_gcr_sa="bm-gcr-svc-account"
 connect_agent_sa="connect-agent-svc-account"
 connect_register_sa="connect-register-svc-account"
