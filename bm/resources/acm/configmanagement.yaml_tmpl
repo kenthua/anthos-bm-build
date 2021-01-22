@@ -8,3 +8,5 @@ spec:
     syncBranch: "${BRANCH}"
     secretType: "${TYPE}"
     policyDir: "${POLICY_DIR}"
+  policyController:
+    enabled: true    
