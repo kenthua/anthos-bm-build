@@ -1,0 +1,10 @@
+apiVersion: configmanagement.gke.io/v1
+kind: ConfigManagement
+metadata:
+  name: config-management
+spec:
+  git:
+    syncRepo: "${REPO_PATH}"
+    syncBranch: "${BRANCH}"
+    secretType: "${TYPE}"
+    policyDir: "${POLICY_DIR}"
