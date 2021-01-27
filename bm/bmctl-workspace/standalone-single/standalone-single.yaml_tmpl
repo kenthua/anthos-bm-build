@@ -103,7 +103,7 @@ spec:
     # Whether collection of application logs/metrics should be enabled (in addition to
     # collection of system logs/metrics which correspond to system components such as
     # Kubernetes control plane or cluster management agents).
-    # enableApplication: false
+    enableApplication: true
   # Storage configuration
   storage:
     # lvpNodeMounts specifies the config for local PersistentVolumes backed by mounted disks.
@@ -169,6 +169,8 @@ spec:
   # with passwordless sudo capability for machine login.
   nodeAccess:
     loginUser: ubuntu
+  kubevirt:
+    useEmulation: true
 ---
 # Node pools for worker nodes
 apiVersion: baremetal.cluster.gke.io/v1
