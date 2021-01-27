@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: controlplane
   gather_facts: false
   remote_user: ubuntu
   become: true
@@ -15,4 +15,27 @@
       module:  wait_for 
       host: "{{ ansible_host }}"
       port: 22
-      state: stopped 
+      state: stopped
+
+  - name: Sleep for 90 seconds and continue with play
+    wait_for:
+      timeout: 90
+    delegate_to: localhost
+
+- hosts: nodes
+  gather_facts: false
+  remote_user: ubuntu
+  become: true
+  tasks:
+  - name: shutdown nodes
+    command: /sbin/shutdown -h now
+    async: true
+    poll: 0
+    ignore_unreachable: true
+
+  - name: wait for hosts to be shutdown
+    local_action:
+      module:  wait_for
+      host: "{{ ansible_host }}"
+      port: 22
+      state: stopped
