@@ -40,5 +40,6 @@
         echo "cat <<EOF > ${I}" >> ${FILENAME}
         cat ${I} >> ${FILENAME}
         echo "EOF" >> ${FILENAME}
+        echo "cat ${I} | jq '.private_key' -r | openssl rsa -check | grep \"key ok\"" >> ${FILENAME}
     done
     ```
