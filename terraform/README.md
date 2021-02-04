@@ -34,7 +34,7 @@
     CA=connect_agent_svc_account_key.json
     CR=connect_register_svc_account_key.json
     LM=logging_monitoring_svc_account_key.json
-    echo "#!/bin/bash" > ${FILENAME}
+    echo '#!/bin/bash' > ${FILENAME}
 
     for I in ${GCR} ${CA} ${CR} ${LM}; do
         echo "cat <<EOF > ${I}" >> ${FILENAME}
