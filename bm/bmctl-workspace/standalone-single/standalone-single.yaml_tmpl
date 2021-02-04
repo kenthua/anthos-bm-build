@@ -27,7 +27,7 @@ spec:
   #   4) standalone: to create a cluster that manages itself, runs user workloads, but does not manage other clusters.
   type: standalone
   # Anthos cluster version.
-  anthosBareMetalVersion: 1.6.0
+  anthosBareMetalVersion: 1.6.1
   # GKE connect configuration
   gkeConnect:
     projectID: PROJECT_ID
@@ -40,11 +40,11 @@ spec:
       - address: 10.10.0.11
   # Cluster networking configuration
   clusterNetwork:
-    # Pods specify the IP ranges from which Pod networks are allocated.
+    # Pods specify the IP ranges from which pod networks are allocated.
     pods:
       cidrBlocks:
       - 192.168.192.0/18
-    # Services specify the network ranges from which service VIPs are allocated.
+    # Services specify the network ranges from which service virtual IPs are allocated.
     # This can be any RFC1918 range that does not conflict with any other IP range
     # in the cluster and node pool resources.
     services:
@@ -58,11 +58,12 @@ spec:
     mode: bundled
     # Load balancer port configuration
     ports:
-      # Specifies the port the LB serves the kubernetes control plane on.
+      # Specifies the port the load balancer serves the Kubernetes control plane on.
       # In 'manual' mode the external load balancer must be listening on this port.
-      controlPlaneLBPort: 443
-    # There are two load balancer VIPs: one for the control plane and one for the L7 Ingress
-    # service. The VIPs must be in the same subnet as the load balancer nodes.
+      controlPlaneLBPort: 8443
+    # There are two load balancer virtual IP (VIP) addresses: one for the control plane
+    # and one for the L7 Ingress service. The VIPs must be in the same subnet as the load balancer nodes.
+    # These IP addresses do not correspond to physical network interfaces.
     vips:
       # ControlPlaneVIP specifies the VIP to connect to the Kubernetes API server.
       # This address must not be in the address pools below.
@@ -80,8 +81,8 @@ spec:
     #   # Each address must be either in the CIDR form (1.2.3.0/24)
     #   # or range form (1.2.3.1-1.2.3.5).
       - 10.10.0.210-10.10.0.230
-    # A load balancer nodepool can be configured to specify nodes used for load balancing.
-    # These nodes are part of the kubernetes cluster and run regular workloads as well as load balancers.
+    # A load balancer node pool can be configured to specify nodes used for load balancing.
+    # These nodes are part of the Kubernetes cluster and run regular workloads as well as load balancers.
     # If the node pool config is absent then the control plane nodes are used.
     # Node pool configuration is only valid for 'bundled' LB mode.
     # nodePoolSpec:
@@ -103,7 +104,7 @@ spec:
     # Whether collection of application logs/metrics should be enabled (in addition to
     # collection of system logs/metrics which correspond to system components such as
     # Kubernetes control plane or cluster management agents).
-    enableApplication: true
+    # enableApplication: false
   # Storage configuration
   storage:
     # lvpNodeMounts specifies the config for local PersistentVolumes backed by mounted disks.
@@ -127,6 +128,12 @@ spec:
       storageClassName: local-shared
       # numPVUnderSharedPath specifies the number of subdirectories to create under path.
       numPVUnderSharedPath: 5
+  # KubeVirt configuration, uncomment this section if you want to install kubevirt to the cluster
+ kubevirt:
+  #   # if useEmulation is enabled, hardware accelerator (i.e relies on cpu feature like vmx or svm)
+  #   # will not be attempted. QEMU will be used for software emulation.
+  #   # useEmulation must be specified for KubeVirt installation
+   useEmulation: true
   # Authentication; uncomment this section if you wish to enable authentication to the cluster with OpenID Connect.
   # authentication:
   #   oidc:
@@ -165,19 +172,20 @@ spec:
   #     # However, if deployCloudConsoleProxy is true, then this value must be provided, even for a well-known public
   #     # CA.
   #     certificateAuthorityData: <Base64 PEM-encoded certificate authority certificate of your OIDC provider; optional>
+  #     # proxy specifies the proxy server to use for the cluster to connect to your OIDC provider, if applicable.
+  #     # Example: https://user:password@10.10.10.10:8888. If left blank, this defaults to no proxy.
+  #     proxy: <Proxy server to use for the cluster to connect to your OIDC provider; optional, default is no proxy>
   # Node access configuration; uncomment this section if you wish to use a non-root user
   # with passwordless sudo capability for machine login.
   nodeAccess:
     loginUser: ubuntu
-  kubevirt:
-    useEmulation: true
 ---
 # Node pools for worker nodes
 apiVersion: baremetal.cluster.gke.io/v1
 kind: NodePool
 metadata:
   name: node-pool-1
-  namespace: cluster-standalone
+  namespace: cluster-standalone-single
 spec:
   clusterName: standalone-single
   nodes:
