@@ -129,11 +129,11 @@ spec:
       # numPVUnderSharedPath specifies the number of subdirectories to create under path.
       numPVUnderSharedPath: 5
   # KubeVirt configuration, uncomment this section if you want to install kubevirt to the cluster
- kubevirt:
+  kubevirt:
   #   # if useEmulation is enabled, hardware accelerator (i.e relies on cpu feature like vmx or svm)
   #   # will not be attempted. QEMU will be used for software emulation.
   #   # useEmulation must be specified for KubeVirt installation
-   useEmulation: true
+    useEmulation: true
   # Authentication; uncomment this section if you wish to enable authentication to the cluster with OpenID Connect.
   # authentication:
   #   oidc:
