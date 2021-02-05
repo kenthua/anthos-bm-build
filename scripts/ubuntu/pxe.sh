@@ -13,7 +13,7 @@ sudo apt-get install -y iptables-persistent
 sudo apt-get -y install dnsmasq
 
 TFTP_ROOT=/var/lib/tftpboot
-UBUNTU_ISO=ubuntu-20.04.1-live-server-amd64.iso
+UBUNTU_ISO=ubuntu-20.04.2-live-server-amd64.iso
 TMP_PATH=/tmp/ubuntu
 
 ## modify resolv.conf accordingly
