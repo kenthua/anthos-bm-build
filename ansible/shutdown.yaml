@@ -4,7 +4,7 @@
   remote_user: ubuntu
   become: true
   tasks:
-  - name: shutdown nodes
+  - name: shutdown controlplane nodes
     command: /sbin/shutdown -h now
     async: true
     poll: 0
