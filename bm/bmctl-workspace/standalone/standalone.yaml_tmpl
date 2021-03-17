@@ -3,11 +3,11 @@
 # create the initial admin/hybrid cluster. Afterwards, when creating user clusters by directly
 # applying the cluster and node pool resources to the existing cluster, you must remove this
 # section.
-gcrKeyPath: /home/centos/bm/q/bm_gcr_svc_account_key.json
+gcrKeyPath: /home/centos/bm/PROJECT_ID/bm_gcr_svc_account_key.json
 sshPrivateKeyPath: /home/centos/.ssh/id_rsa_build
-gkeConnectAgentServiceAccountKeyPath: /home/centos/bm/q/connect_agent_svc_account_key.json
-gkeConnectRegisterServiceAccountKeyPath: /home/centos/bm/q/connect_register_svc_account_key.json
-cloudOperationsServiceAccountKeyPath: /home/centos/bm/q/logging_monitoring_svc_account_key.json
+gkeConnectAgentServiceAccountKeyPath: /home/centos/bm/PROJECT_ID/connect_agent_svc_account_key.json
+gkeConnectRegisterServiceAccountKeyPath: /home/centos/bm/PROJECT_ID/connect_register_svc_account_key.json
+cloudOperationsServiceAccountKeyPath: /home/centos/bm/PROJECT_ID/logging_monitoring_svc_account_key.json
 ---
 apiVersion: v1
 kind: Namespace
@@ -38,7 +38,7 @@ spec:
       # Control plane node pools. Typically, this is either a single machine
       # or 3 machines if using a high availability deployment.
       - address: 10.10.0.11
-      - adresss: 10.10.0.12
+      - address: 10.10.0.12
       - address: 10.10.0.13
   # Cluster networking configuration
   clusterNetwork:
