@@ -1,0 +1,5 @@
+*
+!*.yaml_tmpl
+!*/*.yaml_tmpl
+!.gitignore
+
