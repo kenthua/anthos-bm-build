@@ -15,3 +15,19 @@
         --ignore-validation-errors \
         --bootstrap-cluster-pod-cidr 192.168.100.0/24
     ```
+
+* User Clusters (when an admin cluster is deployed
+
+    ```
+    kubectl --kubeconfig bmctl-workspace/admin/admin-kubeconfig apply -f bmctl-workspace/user1/user1.yaml
+    ```
+
+    ```
+    kubectl --kubeconfig bmctl-workspace/admin/admin-kubeconfig wait \
+      cluster user1 -n cluster-user1 \
+      --for=condition=Reconciling=False --timeout=30m && \
+      kubectl --kubeconfig bmctl-workspace/admin/admin-kubeconfig wait nodepool node-pool-1 \
+      -n cluster-user1 --for=condition=Reconciling=False --timeout=30m &&
+      kubectl --kubeconfig bmctl-workspace/admin/admin-kubeconfig get secret user1-kubeconfig -n cluster-user1 \
+      -o 'jsonpath={.data.value}' | base64 -d > usesr1-kubeconfig
+    ```
