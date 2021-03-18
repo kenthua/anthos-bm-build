@@ -29,5 +29,5 @@
       kubectl --kubeconfig bmctl-workspace/admin/admin-kubeconfig wait nodepool node-pool-1 \
       -n cluster-user1 --for=condition=Reconciling=False --timeout=30m &&
       kubectl --kubeconfig bmctl-workspace/admin/admin-kubeconfig get secret user1-kubeconfig -n cluster-user1 \
-      -o 'jsonpath={.data.value}' | base64 -d > usesr1-kubeconfig
+      -o 'jsonpath={.data.value}' | base64 -d > user1-kubeconfig
     ```
