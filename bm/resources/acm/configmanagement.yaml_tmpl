@@ -3,11 +3,14 @@ kind: ConfigManagement
 metadata:
   name: config-management
 spec:
-  clusterName: "${CLUSTER_NAME}"
   git:
     syncRepo: "${REPO_PATH}"
     syncBranch: "${BRANCH}"
     secretType: "${TYPE}"
     policyDir: "${POLICY_DIR}"
   policyController:
+    auditIntervalSeconds: 5
     enabled: true
+    templateLibraryInstalled: true
+  sourceFormat: hierarchy
+
