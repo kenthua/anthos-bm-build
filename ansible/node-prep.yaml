@@ -1,0 +1,10 @@
+---
+- name: setup node
+  hosts: all
+  gather_facts: true
+  remote_user: ubuntu
+  become: true
+  roles:
+  - setup
+  - prereq
+  - node-base
