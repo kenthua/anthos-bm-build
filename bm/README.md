@@ -19,15 +19,18 @@
 * User Clusters (if an admin cluster is deployed)
 
     ```
-    kubectl --kubeconfig bmctl-workspace/admin/admin-kubeconfig apply -f bmctl-workspace/user1/user1.yaml
+    export PROJECT_ID=THE_PROJECT_ID
+    export CLUSTER_NAME=user1
+    kubectl --kubeconfig bmctl-workspace/admin/admin-kubeconfig apply -f bmctl-workspace/${CLUSTER_NAME}/${CLUSTER_NAME}.yaml
     ```
 
+    > NOTE: The commands below check if the user cluster has been successfully created and extracts the user cluster kubeconfig
     ```
     kubectl --kubeconfig bmctl-workspace/admin/admin-kubeconfig wait \
-      cluster user1 -n cluster-user1 \
+      cluster ${CLUSTER_NAME} -n cluster-${CLUSTER_NAME} \
       --for=condition=Reconciling=False --timeout=30m && \
       kubectl --kubeconfig bmctl-workspace/admin/admin-kubeconfig wait nodepool node-pool-1 \
-      -n cluster-user1 --for=condition=Reconciling=False --timeout=30m &&
-      kubectl --kubeconfig bmctl-workspace/admin/admin-kubeconfig get secret user1-kubeconfig -n cluster-user1 \
-      -o 'jsonpath={.data.value}' | base64 -d > user1-kubeconfig
+      -n cluster-${CLUSTER_NAME} --for=condition=Reconciling=False --timeout=30m &&
+      kubectl --kubeconfig bmctl-workspace/admin/admin-kubeconfig get secret ${CLUSTER_NAME}-kubeconfig -n cluster-${CLUSTER_NAME} \
+      -o 'jsonpath={.data.value}' | base64 -d > ${CLUSTER_NAME}-kubeconfig
     ```
