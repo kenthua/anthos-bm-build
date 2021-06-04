@@ -3,11 +3,11 @@
 # create the initial admin/hybrid cluster. Afterwards, when creating user clusters by directly
 # applying the cluster and node pool resources to the existing cluster, you must remove this
 # section.
-gcrKeyPath: /home/centos/bm/PROJECT_ID/bm_gcr_svc_account_key.json
-sshPrivateKeyPath: /home/centos/.ssh/id_rsa_build
-gkeConnectAgentServiceAccountKeyPath: /home/centos/bm/PROJECT_ID/connect_agent_svc_account_key.json
-gkeConnectRegisterServiceAccountKeyPath: /home/centos/bm/PROJECT_ID/connect_register_svc_account_key.json
-cloudOperationsServiceAccountKeyPath: /home/centos/bm/PROJECT_ID/logging_monitoring_svc_account_key.json
+gcrKeyPath: /home/ubuntu/bm/PROJECT_ID/bm_gcr_svc_account_key.json
+sshPrivateKeyPath: /home/ubuntu/.ssh/id_rsa_build
+gkeConnectAgentServiceAccountKeyPath: /home/ubuntu/bm/PROJECT_ID/connect_agent_svc_account_key.json
+gkeConnectRegisterServiceAccountKeyPath: /home/ubuntu/bm/PROJECT_ID/connect_register_svc_account_key.json
+cloudOperationsServiceAccountKeyPath: /home/ubuntu/bm/PROJECT_ID/logging_monitoring_svc_account_key.json
 ---
 apiVersion: v1
 kind: Namespace
@@ -27,7 +27,7 @@ spec:
   #   4) standalone: to create a cluster that manages itself, runs user workloads, but does not manage other clusters.
   type: admin
   # Anthos cluster version.
-  anthosBareMetalVersion: 1.6.2
+  anthosBareMetalVersion: 1.7.2
   # GKE connect configuration
   gkeConnect:
     projectID: PROJECT_ID
@@ -37,7 +37,7 @@ spec:
       nodes:
       # Control plane node pools. Typically, this is either a single machine
       # or 3 machines if using a high availability deployment.
-      - address: 10.10.0.11
+      - address: 10.10.0.12
   # Cluster networking configuration
   clusterNetwork:
     # Pods specify the IP ranges from which pod networks are allocated.
@@ -49,7 +49,7 @@ spec:
     # in the cluster and node pool resources.
     services:
       cidrBlocks:
-      - 10.96.0.0/12
+      - 10.96.0.0/20
   # Load balancer configuration
   loadBalancer:
     # Load balancer mode can be either 'bundled' or 'manual'.
@@ -80,7 +80,7 @@ spec:
     #   addresses:
     #   # Each address must be either in the CIDR form (1.2.3.0/24)
     #   # or range form (1.2.3.1-1.2.3.5).
-    #   - 10.10.0.210-10.10.0.230
+    #   - 10.0.0.1-10.0.0.4
     # A load balancer node pool can be configured to specify nodes used for load balancing.
     # These nodes are part of the Kubernetes cluster and run regular workloads as well as load balancers.
     # If the node pool config is absent then the control plane nodes are used.
@@ -128,6 +128,15 @@ spec:
       storageClassName: local-shared
       # numPVUnderSharedPath specifies the number of subdirectories to create under path.
       numPVUnderSharedPath: 5
+  # NodeConfig specifies the configuration that applies to all nodes in the cluster.
+  nodeConfig:
+    # podDensity specifies the pod density configuration.
+    podDensity:
+      # maxPodsPerNode specifies at most how many pods can be run on a single node.
+      maxPodsPerNode: 250
+    # containerRuntime specifies which container runtime to use for scheduling containers on nodes.
+    # containerd and docker are supported.
+    containerRuntime: containerd
   # KubeVirt configuration, uncomment this section if you want to install kubevirt to the cluster
   # kubevirt:
   #   # if useEmulation is enabled, hardware accelerator (i.e relies on cpu feature like vmx or svm)
@@ -162,6 +171,9 @@ spec:
   #     # extraParams specifies additional key-value parameters to send to the OpenID provider as a comma-delimited
   #     # list.
   #     extraParams: <Additional key-value parameters to send to OIDC provider as a comma-separated list; optional>
+  #     # proxy specifies the proxy server to use for the cluster to connect to your OIDC provider, if applicable.
+  #     # Example: https://user:password@10.10.10.10:8888. If left blank, this defaults to no proxy.
+  #     proxy: <Proxy server to use for the cluster to connect to your OIDC provider; optional, default is no proxy>
   #     # deployCloudConsoleProxy specifies whether to deploy a reverse proxy in the cluster to allow Google Cloud
   #     # Console access to the on-premises OIDC provider for authenticating users. If your identity provider is not
   #     # reachable over the public internet, and you wish to authenticate using Google Cloud Console, then this field
@@ -172,10 +184,8 @@ spec:
   #     # However, if deployCloudConsoleProxy is true, then this value must be provided, even for a well-known public
   #     # CA.
   #     certificateAuthorityData: <Base64 PEM-encoded certificate authority certificate of your OIDC provider; optional>
-  #     # proxy specifies the proxy server to use for the cluster to connect to your OIDC provider, if applicable.
-  #     # Example: https://user:password@10.10.10.10:8888. If left blank, this defaults to no proxy.
-  #     proxy: <Proxy server to use for the cluster to connect to your OIDC provider; optional, default is no proxy>
   # Node access configuration; uncomment this section if you wish to use a non-root user
   # with passwordless sudo capability for machine login.
   nodeAccess:
     loginUser: ubuntu
+---
