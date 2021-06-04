@@ -16,7 +16,7 @@
         --bootstrap-cluster-pod-cidr 192.168.100.0/24
     ```
 
-* User Clusters (when an admin cluster is deployed
+* User Clusters (if an admin cluster is deployed)
 
     ```
     kubectl --kubeconfig bmctl-workspace/admin/admin-kubeconfig apply -f bmctl-workspace/user1/user1.yaml
