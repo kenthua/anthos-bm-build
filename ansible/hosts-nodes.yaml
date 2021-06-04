@@ -1,0 +1,21 @@
+nodes:
+  vars:
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+  hosts:
+    node02:
+      ansible_host: 10.10.0.12
+      mac: 1c:69:7a:6f:9f:27
+      ansible_ssh_private_key_file: ~/.ssh/id_rsa_build
+    node03:
+      ansible_host: 10.10.0.13
+      mac: 1c:69:7a:6f:ba:c1
+      ansible_ssh_private_key_file: ~/.ssh/id_rsa_build
+    node04:
+      ansible_host: 10.10.0.14
+      mac: 1c:69:7a:6f:c0:a9
+      ansible_ssh_private_key_file: ~/.ssh/id_rsa_build
+    node05:
+      ansible_host: 10.10.0.15
+      mac: 1c:69:7a:6f:ba:2c
+      ansible_ssh_private_key_file: ~/.ssh/id_rsa_build
+
