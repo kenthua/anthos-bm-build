@@ -1,7 +1,8 @@
 * Get a version of terraform 0.14+
     ```
-    curl -OL https://releases.hashicorp.com/terraform/0.14.5/terraform_0.14.5_linux_amd64.zip
-    unzip terraform_0.14.5_linux_amd64.zip
+    TF_VERSION=0.14.11
+    curl -OL https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
+    unzip terraform_${TF_VERSION}_linux_amd64.zip
     chmod 755 terraform
     ```
 
@@ -10,7 +11,7 @@
     PROJECT_ID=kenthua-dev
 
     gcloud init
-    gcloud auth applcation-default login
+    gcloud auth application-default login
 
     gsutil mb gs://${PROJECT_ID}
     ```
